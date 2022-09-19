@@ -1,7 +1,6 @@
 @page "/urlmanager"
 @using TinyBlazorAdmin.Data
 @using Microsoft.AspNetCore.Authorization
-@using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.Inputs
 @inject IJSRuntime JSRuntime;
 @implements IDisposable
@@ -11,7 +10,7 @@
 @inject AzFuncClient azClient
 
 <h1>URL Manager</h1>
-<h3>Create, Edit, Achives your URLs</h3>
+<h3>Create, Edit, Archives your URLs</h3>
 
 @if (UrlList == null)
 {
@@ -20,12 +19,12 @@
 else
 {
     <button class="btn btn-primary"
-            @onclick="CreateShortUrl">
+        @onclick="CreateShortUrl">
         Add New Url
     </button>
 
     <div>
-        <SfGrid  @ref="@grdUrls" id="grdUrls" DataSource="@gridData" AllowPaging="true" AllowSorting="true" AllowFiltering="true" >
+        <SfGrid @ref="@grdUrls" id="grdUrls" DataSource="@gridData" AllowPaging="true" AllowSorting="true" AllowFiltering="true">
             <GridPageSettings PageSize="15"></GridPageSettings>
             <GridColumns>
                 <GridColumn Width="80">
@@ -40,7 +39,8 @@ else
                     <Template>
                         @{
                             var url = (context as ShortUrlEntity);
-                            if(url.Schedules != null){
+                            if (url.Schedules != null)
+                            {
                                 <span>@url.Schedules.Count</span>
                             }
                             else
@@ -58,13 +58,13 @@ else
                         }
                     </Template>
                 </GridColumn>
-                <GridColumn Field=@nameof(ShortUrlEntity.Title) HeaderText="Title" ></GridColumn>
-                <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="Url" ></GridColumn>
-                <GridColumn Field=@nameof(ShortUrlEntity.Clicks) HeaderText="Clicks" >
+                <GridColumn Field=@nameof(ShortUrlEntity.Title) HeaderText="Title"></GridColumn>
+                <GridColumn Field=@nameof(ShortUrlEntity.Url) HeaderText="Url"></GridColumn>
+                <GridColumn Field=@nameof(ShortUrlEntity.Clicks) HeaderText="Clicks">
                     <Template>
                         @{
                             var url = (context as ShortUrlEntity);
-                            <span>@url.Clicks</span>   
+                            <span>@url.Clicks</span>
                             <button type="button" class="btn btn-outline-primary btn-sm" @onclick="@(() => NavigateToStats(url.RowKey))">📊</button>
                         }
                     </Template>
@@ -91,10 +91,11 @@ else
     <p>
         <!-- Add a new ShortUrl -->
         <button class="btn btn-primary"
-                @onclick="CreateShortUrl"> Add New Url
+            @onclick="CreateShortUrl">
+            Add New Url
         </button>
     </p>
-   
+
 }
 
 @if (ShowCreatePopup)
@@ -111,29 +112,29 @@ else
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                        <EditForm Model="shortUrlRequest" OnValidSubmit="SaveShortUrl">
-                            <DataAnnotationsValidator />                        
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                                    <SfTextBox id="title" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Title"></SfTextBox>
-                                </div>
+                    <EditForm Model="shortUrlRequest" OnValidSubmit="SaveShortUrl">
+                        <DataAnnotationsValidator />
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfTextBox id="title" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Title"></SfTextBox>
                             </div>
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                                    <SfTextBox id="url" Placeholder="Url" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Url"></SfTextBox>
-                                    <ValidationMessage For="@(() => shortUrlRequest.Url)" />
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfTextBox id="url" Placeholder="Url" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Url"></SfTextBox>
+                                <ValidationMessage For="@(() => shortUrlRequest.Url)" />
                             </div>
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                                    <SfTextBox id="vanity" Placeholder="Vanity" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Vanity"></SfTextBox>
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                                <SfTextBox id="vanity" Placeholder="Vanity" FloatLabelType="@FloatLabelType.Auto" @bind-Value="shortUrlRequest.Vanity"></SfTextBox>
                             </div>
+                        </div>
 
-                            <div>
-                                <SchedulesComponent schedules="shortUrlRequest.Schedules"></SchedulesComponent>
-                            </div>
-                        </EditForm>
+                        <div>
+                            <SchedulesComponent schedules="shortUrlRequest.Schedules"></SchedulesComponent>
+                        </div>
+                    </EditForm>
                 </div>
 
                 <!-- Modal footer -->
@@ -192,7 +193,7 @@ else
         </div>
     </div>
 
-} 
+}
 
 @code
 {
@@ -210,7 +211,8 @@ else
         ShowEditPopup = false;
     }
 
-    private async Task UpdateUIList() {
+    private async Task UpdateUIList()
+    {
         UrlList = await azClient.GetUrlList();
         gridData = UrlList.UrlList;
         StateHasChanged();
@@ -233,7 +235,8 @@ else
         await UpdateUIList();
     }
 
-    private void NavigateToStats(string vanity){
+    private void NavigateToStats(string vanity)
+    {
         NavigationManager.NavigateTo("/Statistics/" + vanity);
     }
 
@@ -241,7 +244,8 @@ else
     {
         await UpdateUIList();
 
-        foreach (var u in UrlList.UrlList){
+        foreach (var u in UrlList.UrlList)
+        {
             var temp = u.ShortUrl;
         }
     }
@@ -264,33 +268,33 @@ else
         NavigationManager.LocationChanged -= LocationChanged;
     }
 
-[Authorize(Roles = "admin")]
-void CreateShortUrl()
-{
-    shortUrlRequest = new ShortUrlRequest();
-    ShowCreatePopup = true;
-}
+    [Authorize(Roles = "admin")]
+    void CreateShortUrl()
+    {
+        shortUrlRequest = new ShortUrlRequest();
+        ShowCreatePopup = true;
+    }
 
 
-[Authorize(Roles = "admin")]
-void EditShortUrl(ShortUrlEntity urlEntity)
-{
-    editedUrl = urlEntity;
-    ShowEditPopup = true;
-}
+    [Authorize(Roles = "admin")]
+    void EditShortUrl(ShortUrlEntity urlEntity)
+    {
+        editedUrl = urlEntity;
+        ShowEditPopup = true;
+    }
 
-[Authorize(Roles = "admin")]
-public async Task ArchiveShortUrl(ShortUrlEntity urlEntity)
-{
-    await azClient.ArchiveShortUrl(urlEntity);
-    await UpdateUIList();
-}
+    [Authorize(Roles = "admin")]
+    public async Task ArchiveShortUrl(ShortUrlEntity urlEntity)
+    {
+        await azClient.ArchiveShortUrl(urlEntity);
+        await UpdateUIList();
+    }
 
 
-[Inject] public IJSRuntime JsRuntime { get; set; }
-public async Task CopyToClipboardAsync(string url)
-{
-    await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", url);
-}
+    [Inject] public IJSRuntime JsRuntime { get; set; }
+    public async Task CopyToClipboardAsync(string url)
+    {
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", url);
+    }
 
 }
