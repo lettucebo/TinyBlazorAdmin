@@ -45,8 +45,7 @@ namespace TinyBlazorAdmin.Data
 
         public async Task<ShortUrlList> GetUrlList()
         {
-            string result = string.Empty;
-            var resultList = await _client.GetFromJsonAsync<ShortUrlList>($"/api/UrlList");
+            var resultList = await _client.GetFromJsonAsync<ShortUrlList>($"/api/UrlList").ConfigureAwait(false);
             return resultList;
         }
 
@@ -54,9 +53,10 @@ namespace TinyBlazorAdmin.Data
         {
             CancellationToken cancellationToken = new CancellationToken();
 
-            var response = await _client.PostAsJsonAsync($"/api/UrlShortener", shortUrlRequest, cancellationToken);
+            var response = await _client.PostAsJsonAsync($"/api/UrlShortener", shortUrlRequest, cancellationToken)
+                .ConfigureAwait(false);
 
-            var resultList = await response.Content.ReadAsStringAsync();
+            var resultList = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<ShortUrlList>(resultList);
         }
 
@@ -64,9 +64,10 @@ namespace TinyBlazorAdmin.Data
         {
             CancellationToken cancellationToken = new CancellationToken();
 
-            var response = await _client.PostAsJsonAsync($"/api/UrlUpdate", editedUrl, cancellationToken);
+            var response = await _client.PostAsJsonAsync($"/api/UrlUpdate", editedUrl, cancellationToken)
+                .ConfigureAwait(false);
 
-            var resultList = await response.Content.ReadAsStringAsync();
+            var resultList = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<ShortUrlEntity>(resultList);
         }
 
@@ -74,26 +75,32 @@ namespace TinyBlazorAdmin.Data
         {
             CancellationToken cancellationToken = new CancellationToken();
 
-            var response = await _client.PostAsJsonAsync($"/api/UrlArchive", archivedUrl, cancellationToken);
+            var response = await _client.PostAsJsonAsync($"/api/UrlArchive", archivedUrl, cancellationToken)
+                .ConfigureAwait(false);
 
-            var resultList = await response.Content.ReadAsStringAsync();
+            var resultList = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<ShortUrlEntity>(resultList);
         }
 
-        public async Task<ClickDateList> GetClickStats(string vanity) {
-            try{
-            CancellationToken cancellationToken = new CancellationToken();
+        public async Task<ClickDateList> GetClickStats(string vanity)
+        {
+            try
+            {
+                CancellationToken cancellationToken = new CancellationToken();
 
-            string result = string.Empty;
-            var response = await _client.PostAsJsonAsync($"/api/UrlClickStatsByDay", new { Vanity = vanity }, cancellationToken);
-            var resultList = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<ClickDateList>(resultList);;
-
+                string result = string.Empty;
+                var response = await _client
+                    .PostAsJsonAsync($"/api/UrlClickStatsByDay", new { Vanity = vanity }, cancellationToken)
+                    .ConfigureAwait(false);
+                var resultList = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<ClickDateList>(resultList);
+                ;
             }
-            catch(Exception ex){
+            catch (Exception ex)
+            {
                 var ttt = ex.Message;
                 return new ClickDateList();
-            }    
+            }
         }
     }
 }

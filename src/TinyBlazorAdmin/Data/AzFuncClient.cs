@@ -8,7 +8,7 @@ namespace TinyBlazorAdmin.Data
     public class AzFuncClient
     {
         /// <summary>
-        /// The <see cref="UrlShortenerSecuredService"/> to retrive credentials.
+        /// The <see cref="UrlShortenerSecuredService"/> to retrieve credentials.
         /// </summary>
         private readonly UrlShortenerSecuredService _urlSecuredService;
 
@@ -23,31 +23,31 @@ namespace TinyBlazorAdmin.Data
 
         public async Task<ShortUrlList> GetUrlList()
         {
-            var result = await _urlSecuredService.GetUrlList();
+            var result = await _urlSecuredService.GetUrlList().ConfigureAwait(false);
             return result;
         }
 
         public async Task<ShortUrlList> CreateShortUrl(ShortUrlRequest shortUrlRequest)
         {
-            var result = await _urlSecuredService.CreateShortUrl(shortUrlRequest);
+            var result = await _urlSecuredService.CreateShortUrl(shortUrlRequest).ConfigureAwait(false);
             return result;
         }
 
         public async Task<ShortUrlEntity> UpdateShortUrl(ShortUrlEntity editedUrl)
         {
-            var result = await _urlSecuredService.UpdateShortUrl(editedUrl);
+            var result = await _urlSecuredService.UpdateShortUrl(editedUrl).ConfigureAwait(false);
             return result;
         }
 
         public async Task<ShortUrlEntity> ArchiveShortUrl(ShortUrlEntity archivedUrl)
         {
-            var result = await _urlSecuredService.ArchiveShortUrl(archivedUrl);
+            var result = await _urlSecuredService.ArchiveShortUrl(archivedUrl).ConfigureAwait(false);
             return result;
         }
 
         public async Task<ClickDateList> GetClickStats(string vanity)
         {
-            var result = await _urlSecuredService.GetClickStats(vanity);
+            var result = await _urlSecuredService.GetClickStats(vanity).ConfigureAwait(false);
             return result;
         }
 
